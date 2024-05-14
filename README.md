@@ -16,20 +16,18 @@ The "Massive Multitask Language Understanding" test is composed of 14042 multipl
 
 Question 45 from the "high school mathematics" category, formatted for Llama 3-Instruct:
 
-```js
-<|start_header_id|>user<|end_header_id|>
-
-Question:
-To place the first paving stone in a path, Alex starts at the crate of stones, walks three feet, places the stone, and returns to the crate. For each subsequent stone, Alex walks two feet farther each way. Alex will place the first 50 stones in a path. After returning to the crate from placing the $50^\text{th}$ stone, what is the total distance Alex walked, in feet?
-
-Choices:
-A: 100
-B: 90950
-C: 5200
-D: 50<|eot_id|><|start_header_id|>assistant<|end_header_id|>
-
-Answer:
-```
+> <|start_header_id|>user<|end_header_id|>
+> 
+> Question:
+> To place the first paving stone in a path, Alex starts at the crate of stones, walks three feet, places the stone, and returns to the crate. For each subsequent stone, Alex walks two feet farther each way. Alex will place the first 50 stones in a path. After returning to the crate from placing the $50^\text{th}$ stone, what is the total distance Alex walked, in feet?
+> 
+> Choices:  
+> A: 100  
+> B: 90950  
+> C: 5200  
+> D: 50<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+> 
+> Answer:
 
 To which a model is expected to reply with a single token, saying ` A`, ` B`, ` C`, or ` D`. Here, C is correct.
 
