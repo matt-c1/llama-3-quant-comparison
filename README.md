@@ -1,8 +1,8 @@
 [**Llama 3**](https://github.com/meta-llama/llama3/blob/main/MODEL_CARD.md) is an amazing open large language model.
-The 70B variant's weights were published as 130 GB of `bfloat16` tensors in `safetensors` format.
+The **70B** variant's weights were published as 130 GB of `bfloat16` tensors in `safetensors` format.
 The smaller variant, **8B**, weighs 15 GB.
 Thanks to quantization methods, we can run these models on consumer hardware while retaining good quality.
-I tested how much quantization affects the Instruct variant of these models, using [the MMLU test.](https://github.com/hendrycks/test)
+I tested how much quantization affects the **Instruct** variant of these models, using [the MMLU test.](https://github.com/hendrycks/test)
 
 # Results
 
