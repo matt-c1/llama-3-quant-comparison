@@ -110,10 +110,10 @@ This can allow running large models on limited hardware, but may hurt quality. [
 
 Quantization methods typically use mixed precision, expressing different parts of a model in different ways. A way to characterize quantization in one number is to divide its size (or the size of quantized parts of the model) in bits by its number of parameters (weights). Mind that the number of parameters is typically expressed in metric "engineering" units (powers of 1000), and file size in JEDEC units (powers of 1024), so the formula is:
 
-$$
-\mathup{bpw} = \left(\frac{1024}{1000}\right)^3 \cdot \frac{\text{(size in GB)}}{\text{(billions of parameters)}}
-\approx 1.0737 \ \frac{\text{(size in GB)}}{\text{(billions of parameters)}}
-$$
+```
+bpw = (1024/1000)^3 (size in GB) / (billions of parameters) ≈
+    ≈ 1.0737 (size in GB) / (billions of parameters)
+```
 
 </details>
 
