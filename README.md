@@ -261,9 +261,13 @@ This table shows average **confidence** per category. Since 70B models were only
 - `transformers` quantization is slightly lower quality, except `bitsandbytes` 4 bit **nf4** which interestingly keeps up with GGUF, beating all "\*Q3\*" quants.
 
 ### Is exllamav2 under-performing?
+For lower bpw it seems to score lower on MMLU compared to GGUF of the same *file size.*
+However, file size does not exactly correlate to the memory a model will use.
+Considering the average bpw  of the quantized layers (as in the next figure) may be a more fair comparison.
+Still, ExLlamaV2 offers some advantages:
 - It *can be* faster than fully offloaded GGUF, depending on the task. In this test it was almost twice as fast, processing 14 thousand tokens per second vs 7500 for llama.cpp.
 It seems that for the same bpw, EXL2 resulted in worse MMLU scores. But for now ExLlamaV2 still offers some unique advantages:
-- It offers 4 bit cache, which allows quartering the memory necessary for context size. If you count context, EXL2 may become your best option until llama.cpp implements this feature. Especially if you need 16k+ context length. (Supported by other models, supposedly a long context Llama 3 is in training.)
+- It offers 4 bit cache, which allows quartering the memory necessary for context size. If you count context, EXL2 may become your best option until llama.cpp implements this feature (see: [1](https://github.com/ggerganov/llama.cpp/issues/6863), [2](https://github.com/ggerganov/llama.cpp/discussions/5932)). Especially if you need 16k+ context length.
 - I personally found it to be easiest and most pleasant to work with from Python's level, but that's subjective and depends on the task.
 
 ## Confidence vs bpw
