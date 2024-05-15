@@ -2,7 +2,7 @@
 The 70B variant's weights were published as 130 GB of `bfloat16` tensors in `safetensors` format.
 The smaller variant, **8B**, weighs 15 GB.
 Thanks to quantization methods, we can run these models on consumer hardware while retaining good quality.
-I tested how much quantization affects these models, using [the MMLU test.](https://github.com/hendrycks/test)
+I tested how much quantization affects the Instruct variant of these models, using [the MMLU test.](https://github.com/hendrycks/test)
 
 # Results
 
@@ -130,9 +130,9 @@ The following plot shows how the models slowly lose the ability to answer MMLU q
 <img src="./plots/MMLU-Correctness-vs-File-Size.svg">
 
 - The points labeled "70B" correspond to the 70B variant of the Llama 3 model, the rest the 8B variant.
-- "gguf" used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) provided by `bartowski`. The "Q-numbers"
-- "exl2" also used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-exl2) provided by `bartowski`, in fp16, 8 bpw (bits per weight), 6.5 bpw, 5 bpw, 4.25 bpw, 3.5 bpw.
-- "transformers" refers to evaluating the model using the HuggingFace `transformers` module and its supported `bitsandbytes` quantization-on-load options: 8 bit, 4 bit fp4, 4 bit nf4 (normalized float).
+- "gguf" used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) provided by `bartowski`. The "Q-numbers" don't correspond to bpw (bits per weight) exactly (see next plot).
+- "exl2" also used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-exl2) provided by `bartowski`, in fp16, 8 bpw, 6.5 bpw, 5 bpw, 4.25 bpw, 3.5 bpw.
+- "transformers" refers to evaluating the model using the HuggingFace `transformers` module and its supported `bitsandbytes` quantization-on-load options: 8 bit, 4 bit fp4, 4 bit nf4 (normalized float). nf4 is the better performing one.
 
 <details> <summary>Data table</summary>
 
