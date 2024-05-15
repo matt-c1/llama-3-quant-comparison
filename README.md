@@ -188,6 +188,72 @@ bpw here was calculated only considering Llama 3's `model.layers.*.weight` layer
 
 </details>
 
+<details> <summary>Selected results per category</summary>
+
+This table shows average **confidence** per category. Since 70B models were only evaluated on 50 questions per category, and some categories had 500+, the individual results may not be very comparable between 70B and 8B.
+  
+|category|70B-Q5_K_M|70B-IQ2_XXS|8B-Q8_0|8B-IQ2_M|
+|--|--:|--:|--:|--:|
+|marketing|98.1%|94.2%|89.0%|83.2%|
+|high school government and politics|98.1%|97.8%|90.1%|80.8%|
+|medical genetics|96.6%|85.3%|82.7%|71.0%|
+|jurisprudence|96.0%|93.7%|78.0%|71.0%|
+|high school us history|95.3%|89.0%|80.0%|70.3%|
+|high school psychology|94.8%|91.7%|84.1%|76.5%|
+|high school microeconomics|93.9%|80.8%|75.9%|62.0%|
+|human sexuality|93.5%|81.3%|77.7%|66.1%|
+|astronomy|93.4%|81.2%|70.9%|62.3%|
+|business ethics|93.2%|76.0%|66.6%|60.0%|
+|us foreign policy|92.6%|91.2%|85.9%|78.3%|
+|prehistory|92.5%|85.2%|73.7%|64.5%|
+|nutrition|92.0%|89.9%|76.3%|64.1%|
+|high school world history|91.3%|88.7%|82.8%|73.8%|
+|college biology|90.9%|85.1%|79.3%|67.0%|
+|high school geography|90.9%|85.7%|83.8%|74.2%|
+|miscellaneous|90.5%|86.8%|82.8%|75.6%|
+|high school computer science|90.3%|83.3%|71.2%|62.9%|
+|management|89.9%|88.4%|83.5%|73.8%|
+|sociology|89.5%|83.6%|84.4%|79.4%|
+|international law|87.9%|86.4%|78.2%|69.7%|
+|conceptual physics|87.4%|82.4%|57.0%|47.8%|
+|world religions|87.2%|82.1%|82.5%|77.5%|
+|professional medicine|86.8%|76.4%|71.7%|58.2%|
+|philosophy|86.7%|73.2%|71.4%|66.1%|
+|computer security|86.5%|86.5%|76.7%|73.7%|
+|moral scenarios|86.0%|49.3%|43.5%|33.3%|
+|human aging|85.4%|83.8%|71.8%|64.7%|
+|high school biology|84.7%|79.0%|80.3%|71.1%|
+|college medicine|84.4%|74.3%|65.6%|59.6%|
+|logical fallacies|84.3%|77.6%|77.8%|69.6%|
+|professional psychology|83.8%|75.5%|69.4%|60.9%|
+|high school european history|83.2%|79.6%|77.9%|72.6%|
+|clinical knowledge|82.5%|72.6%|75.0%|65.2%|
+|high school macroeconomics|82.1%|79.2%|66.3%|55.9%|
+|anatomy|81.7%|66.2%|69.6%|56.7%|
+|electrical engineering|81.0%|71.8%|62.8%|55.7%|
+|security studies|78.7%|77.5%|72.9%|68.5%|
+|high school statistics|77.9%|53.1%|52.6%|49.8%|
+|public relations|77.7%|64.8%|70.2%|61.3%|
+|elementary mathematics|75.7%|63.6%|46.0%|39.1%|
+|machine learning|74.3%|62.8%|49.8%|42.5%|
+|high school physics|72.2%|60.7%|37.9%|33.5%|
+|moral disputes|69.5%|60.6%|72.5%|64.7%|
+|high school chemistry|65.8%|59.4%|52.0%|44.4%|
+|college computer science|65.6%|57.5%|55.0%|50.6%|
+|college physics|65.2%|49.9%|45.7%|43.0%|
+|formal logic|62.5%|50.1%|49.7%|42.2%|
+|econometrics|61.9%|52.2%|53.0%|41.5%|
+|abstract algebra|60.7%|41.7%|29.7%|29.5%|
+|college mathematics|60.0%|43.1%|36.6%|31.1%|
+|virology|59.1%|55.6%|51.6%|49.6%|
+|professional law|58.0%|52.6%|46.8%|41.6%|
+|global facts|56.7%|44.6%|39.1%|33.0%|
+|professional accounting|54.8%|45.4%|52.1%|47.1%|
+|high school mathematics|54.1%|44.4%|34.9%|29.6%|
+|college chemistry|52.7%|49.4%|45.1%|40.7%|
+
+</details>
+
 ### Key takeaways:
 - Modern GGUF "I-Quants" seem to offer the best quality at given size.
 - All tested quantization formats perform the same at fp16.
@@ -248,13 +314,15 @@ Example, question 133 from the "high school psychology" category:
 > C. III only  
 > D. I and II only  
 
-This question lacks statements numbered I, II, and III, necessary to answer it.
+This question lacks statements numbered I, II, and III necessary to answer it.
 
 ## Inference code
 
 I based my code on the test included in [ExLlamaV2's repository,](https://github.com/turboderp/exllamav2/blob/master/tests/test_mmlu.py) but modified it heavily.
 
-You can find pre-compiled Python wheels for inference libraries from the [text-generation-webui repository.](https://github.com/oobabooga/text-generation-webui/blob/main/requirements.txt)
+You can find pre-compiled Python wheels for inference libraries listed in the [text-generation-webui repository.](https://github.com/oobabooga/text-generation-webui/blob/dev/requirements.txt)
+
+The MMLU dataset can be found [on HuggingFace](https://huggingface.co/datasets/cais/mmlu) and read with `pandas`.
 
 The snippets assume that you load a list of strings representing the questions and answers as `prompts` and `answers`.
 
@@ -381,3 +449,14 @@ for prompt, answer in zip(prompts, answers):
 ```
 
 </details>
+
+Evaluating the results from `logits_ans` involves checking if the highest logit corresponds to the correct answer.
+To measure confidence, record the normalized probability for the correct answer. Here, `answer_id is in {0, 1, 2, 3}` and corresponds to the correct answer token.
+
+```py
+prob_ans = torch.softmax(logits_ans, dim=-1)
+confidence = float(prob_ans[0, answer_id])
+correct = bool(prob_ans.argmax() == answer_id)
+```
+
+Lastly, record the individual results per question or compute the averages, minding the varying number of questions per category.
