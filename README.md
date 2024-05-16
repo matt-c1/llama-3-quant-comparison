@@ -123,16 +123,17 @@ These are popular quantized LLM file formats, working with [Exllama v2](https://
 
 </details>
 
-## Correctness vs File Size
+## Correctness vs Model Size
 
 The following plot shows how the models slowly lose the ability to answer MMLU questions correctly the more quantized they are.
 
-<img src="./plots/MMLU-Correctness-vs-File-Size.svg">
+<img src="./plots/MMLU-Correctness-vs-Model-Size.svg">
 
 - The points labeled "70B" correspond to the 70B variant of the Llama 3 model, the rest the 8B variant.
 - "gguf" used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) provided by `bartowski`. The "Q-numbers" don't correspond to bpw (bits per weight) exactly (see next plot).
 - "exl2" also used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-exl2) provided by `bartowski`, in fp16, 8 bpw, 6.5 bpw, 5 bpw, 4.25 bpw, 3.5 bpw.
 - "transformers" refers to evaluating the model using the HuggingFace `transformers` module and its supported `bitsandbytes` quantization-on-load options: 8 bit, 4 bit fp4, 4 bit nf4 (normalized float). nf4 is the better performing one.
+- The "model size" here is file size minus the size of the embeddings (which don't get loaded into VRAM) but it does include the head size.
 
 <details> <summary>Data table</summary>
 
@@ -140,51 +141,51 @@ The following plot shows how the models slowly lose the ability to answer MMLU q
 
 bpw here was calculated only considering Llama 3's `model.layers.*.weight` layers, as the approach to quantizing the rest of the model differs significantly between methods.
 
-| File size [GB] | MMLU [%] | bpw | Model | Quant | Type |
+| Model size [GB] | MMLU [%] | bpw | Model | Quant | Type |
 | --:| --:| --:|:--:|:--:|:--:|
-| 46.52 | \* 80.82 |  5.66 | 70B | Q5_K_M | GGUF |
-| 35.30 | \* 80.46 |  4.26 | 70B | IQ4_XS | GGUF |
-| 29.74 | \* 80.06 |  3.50 | 70B | IQ3_M | GGUF |
-| 25.58 | \* 79.09 |  3.04 | 70B | IQ3_XXS | GGUF |
-| 22.46 | \* 77.01 |  2.62 | 70B | IQ2_M | GGUF |
-| 20.71 | \* 76.05 |  2.38 | 70B | IQ2_S | GGUF |
-| 19.69 | \* 74.94 |  2.35 | 70B | IQ2_XS | GGUF |
-| 17.79 | \* 72.31 |  2.11 | 70B | IQ2_XXS | GGUF |
-| 15.60 | \* 65.21 |  1.81 | 70B | IQ1_M | GGUF |
-| 14.97 | 65.20 | 16.00 | 8B | fp16 | GGUF |
-| 14.96 | 65.20 | 16.00 | 8B | fp16 | Exl2 |
-| 14.96 | 65.21 | 16.00 | 8B | bf16 | transformers |
-| 14.29 | \* 61.18 |  1.63 | 70B | IQ1_S | GGUF |
-|  7.96 | 65.20 |  7.99 | 8B | 8.00 bpw | Exl2 |
-|  7.95 | 65.23 |  8.50 | 8B | Q8_0 | GGUF |
-|  7.48 | 64.53 |  8.00 | 8B | 8bit | transformers |
-|  6.75 | 64.99 |  6.49 | 8B | 6.50 bpw | Exl2 |
-|  6.14 | 65.06 |  6.56 | 8B | Q6_K | GGUF |
-|  5.43 | 64.27 |  5.00 | 8B | 5.00 bpw | Exl2 |
-|  5.34 | 64.90 |  5.67 | 8B | Q5_K_M | GGUF |
-|  5.21 | 64.88 |  5.50 | 8B | Q5_K_S | GGUF |
-|  4.82 | 63.36 |  4.25 | 8B | 4.25 bpw | Exl2 |
-|  4.58 | 64.64 |  4.82 | 8B | Q4_K_M | GGUF |
-|  4.37 | 64.63 |  4.54 | 8B | Q4_K_S | GGUF |
-|  4.36 | 64.33 |  4.52 | 8B | IQ4_NL | GGUF |
-|  4.21 | 60.28 |  3.50 | 8B | 3.50 bpw | Exl2 |
-|  4.14 | 64.39 |  4.28 | 8B | IQ4_XS | GGUF |
-|  4.03 | 62.85 |  4.08 | 8B | Q3_K_L | GGUF |
-|  3.74 | 62.89 |  3.79 | 8B | Q3_K_M | GGUF |
-|  3.74 | 63.42 |  4.00 | 8B | 4bit-nf4 | transformers |
-|  3.74 | 61.75 |  4.00 | 8B | 4bit-fp4 | transformers |
-|  3.52 | 62.55 |  3.50 | 8B | IQ3_M | GGUF |
-|  3.43 | 62.13 |  3.46 | 8B | IQ3_S | GGUF |
-|  3.41 | 59.14 |  3.44 | 8B | Q3_K_S | GGUF |
-|  3.28 | 61.19 |  3.26 | 8B | IQ3_XS | GGUF |
-|  3.05 | 60.52 |  3.04 | 8B | IQ3_XXS | GGUF |
-|  2.96 | 55.90 |  2.90 | 8B | Q2_K | GGUF |
-|  2.75 | 57.56 |  2.64 | 8B | IQ2_M | GGUF |
-|  2.57 | 53.98 |  2.40 | 8B | IQ2_S | GGUF |
-|  2.43 | 49.98 |  2.37 | 8B | IQ2_XS | GGUF |
-|  2.23 | 43.50 |  2.14 | 8B | IQ2_XXS | GGUF |
-|  2.01 | 28.83 |  1.84 | 8B | IQ1_M | GGUF |
-|  1.88 | 26.47 |  1.66 | 8B | IQ1_S | GGUF |
+| 45.84 | \* 80.82 |  5.66 | 70B | Q5_K_M | GGUF |
+| 34.77 | \* 80.46 |  4.26 | 70B | IQ4_XS | GGUF |
+| 29.32 | \* 80.06 |  3.50 | 70B | IQ3_M | GGUF |
+| 25.16 | \* 79.09 |  3.04 | 70B | IQ3_XXS | GGUF |
+| 22.04 | \* 77.01 |  2.62 | 70B | IQ2_M | GGUF |
+| 20.29 | \* 76.05 |  2.38 | 70B | IQ2_S | GGUF |
+| 19.36 | \* 74.94 |  2.35 | 70B | IQ2_XS | GGUF |
+| 17.46 | \* 72.31 |  2.11 | 70B | IQ2_XXS | GGUF |
+| 15.27 | \* 65.21 |  1.81 | 70B | IQ1_M | GGUF |
+| 13.98 | 65.20 | 16.00 | 8B | fp16 | GGUF |
+| 13.98 | 65.20 | 16.00 | 8B | fp16 | Exl2 |
+| 13.98 | 65.21 | 16.00 | 8B | bf16 | transformers |
+| 13.96 | \* 61.18 |  1.63 | 70B | IQ1_S | GGUF |
+|  7.43 | 65.23 |  8.50 | 8B | Q8_0 | GGUF |
+|  6.99 | 64.53 |  8.00 | 8B | 8bit | transformers |
+|  6.99 | 65.20 |  7.99 | 8B | 8bit | Exl2 |
+|  5.77 | 64.99 |  6.49 | 8B | 8bit | Exl2 |
+|  5.73 | 65.06 |  6.56 | 8B | Q6_K | GGUF |
+|  5.00 | 64.90 |  5.67 | 8B | Q5_K_M | GGUF |
+|  4.87 | 64.88 |  5.50 | 8B | Q5_K_S | GGUF |
+|  4.45 | 64.27 |  5.00 | 8B | Q5_K_S | Exl2 |
+|  4.30 | 64.64 |  4.82 | 8B | Q4_K_M | GGUF |
+|  4.09 | 64.63 |  4.54 | 8B | Q4_K_S | GGUF |
+|  4.07 | 64.33 |  4.52 | 8B | IQ4_NL | GGUF |
+|  3.87 | 64.39 |  4.28 | 8B | IQ4_XS | GGUF |
+|  3.84 | 63.36 |  4.25 | 8B | IQ4_XS | Exl2 |
+|  3.81 | 62.85 |  4.08 | 8B | Q3_K_L | GGUF |
+|  3.53 | 62.89 |  3.79 | 8B | Q3_K_M | GGUF |
+|  3.49 | 63.42 |  4.00 | 8B | 4bitnf4 | transformers |
+|  3.49 | 61.75 |  4.00 | 8B | 4bitfp4 | transformers |
+|  3.31 | 62.55 |  3.50 | 8B | IQ3_M | GGUF |
+|  3.23 | 60.28 |  3.50 | 8B | IQ3_M | Exl2 |
+|  3.21 | 62.13 |  3.46 | 8B | IQ3_S | GGUF |
+|  3.20 | 59.14 |  3.44 | 8B | Q3_K_S | GGUF |
+|  3.06 | 61.19 |  3.26 | 8B | IQ3_XS | GGUF |
+|  2.83 | 60.52 |  3.04 | 8B | IQ3_XXS | GGUF |
+|  2.79 | 55.90 |  2.90 | 8B | Q2_K | GGUF |
+|  2.53 | 57.56 |  2.64 | 8B | IQ2_M | GGUF |
+|  2.35 | 53.98 |  2.40 | 8B | IQ2_S | GGUF |
+|  2.26 | 49.98 |  2.37 | 8B | IQ2_XS | GGUF |
+|  2.07 | 43.50 |  2.14 | 8B | IQ2_XXS | GGUF |
+|  1.85 | 28.83 |  1.84 | 8B | IQ1_M | GGUF |
+|  1.71 | 26.47 |  1.66 | 8B | IQ1_S | GGUF |
 
 </details>
 
