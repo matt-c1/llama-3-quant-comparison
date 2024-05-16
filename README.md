@@ -130,10 +130,10 @@ The following plot shows how the models slowly lose the ability to answer MMLU q
 <img src="./plots/MMLU-Correctness-vs-Model-Size.svg">
 
 - The points labeled "70B" correspond to the 70B variant of the Llama 3 model, the rest the 8B variant.
-- "gguf" used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) provided by `bartowski`. The "Q-numbers" don't correspond to bpw (bits per weight) exactly (see next plot).
+- "gguf" used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) provided by `bartowski`. The "Q-numbers" don't correspond to bpw (bits per weight) exactly (see [next plot](#confidence-vs-bpw)).
 - "exl2" also used [files](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-exl2) provided by `bartowski`, in fp16, 8 bpw, 6.5 bpw, 5 bpw, 4.25 bpw, 3.5 bpw.
 - "transformers" refers to evaluating the model using the HuggingFace `transformers` module and its supported `bitsandbytes` quantization-on-load options: 8 bit, 4 bit fp4, 4 bit nf4 (normalized float). nf4 is the better performing one.
-- The "model size" here is file size minus the size of the embeddings (which don't get loaded into VRAM) but it does include the head size.
+- The "model size" here is file size minus the size of the embeddings (which don't get loaded into VRAM) but it does include the head size. It's not easy to fairly compare different frameworks. As an example, I included the exact sizes of layers in a few variants [at the end of the article.](#the-tensors)
 
 <details> <summary>Data table</summary>
 
@@ -465,3 +465,32 @@ correct = bool(prob_ans.argmax() == answer_id)
 ```
 
 Lastly, record the individual results per question or compute the averages, minding the varying number of questions per category.
+
+## The Tensors
+
+<details> <summary>Size of individual model layers</summary>
+
+This table compares the layer sizes of:
+- the original transformers Llama 8B in bfloat16
+- EXL2 8.0 bpw
+- GGUF Q8_0 (which is ~8.5 bpw)
+
+| layer | transformers [bytes] | EXL2 [bytes] | EXL2 [bpw] | GGUF [bytes] | GGUF [bpw] |
+|:-- | --:| --:| --:| --:| --:|
+| model.embed_tokens         |  1 050 673 152 |  1 050 673 152 | 16.00 |    558 170 112 |  8.50 |
+| lm_head                    |  1 050 673 152 |    527 405 248 |  8.03 |    558 170 112 |  8.50 |
+| model.norm                 |          8 192 |          8 192 | 16.00 |         16 384 | 32.00 |
+| *.input_layernorm          |        262 144 |        262 144 | 16.00 |        524 288 | 32.00 |
+| *.self_attn.q_proj         |  1 073 741 824 |    539 498 496 |  8.04 |    570 425 344 |  8.50 |
+| *.self_attn.k_proj         |    268 435 456 |    135 272 448 |  8.06 |    142 606 336 |  8.50 |
+| *.self_attn.v_proj         |    268 435 456 |    135 272 448 |  8.06 |    142 606 336 |  8.50 |
+| *.self_attn.o_proj         |  1 073 741 824 |    539 498 496 |  8.04 |    570 425 344 |  8.50 |
+| *.post_attention_layernorm |        262 144 |        262 144 | 16.00 |        524 288 | 32.00 |
+| *.mlp.down_proj            |  3 758 096 384 |  1 875 792 896 |  7.99 |  1 996 488 704 |  8.50 |
+| *.mlp.gate_proj            |  3 758 096 384 |  1 874 073 600 |  7.98 |  1 996 488 704 |  8.50 |
+| *.mlp.up_proj              |  3 758 096 384 |  1 874 073 600 |  7.98 |  1 996 488 704 |  8.50 |
+| model.layers.*             | 13 959 168 000 |  6 974 006 272 |  7.99 |  7 416 578 048 |  8.50 |
+
+All the "\*." layers add up to "model.layers.\*".
+
+</details>
