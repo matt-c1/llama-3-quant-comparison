@@ -292,6 +292,7 @@ I had to include this, because no one can resist "things looking linear on a log
 
 - To calculate MMLU, I made a mistake of using the first five questions in each "test" category for 5-shot evaluation, instead of using the "dev" set. This changes the MMLU values slightly, but isn't an issue in this study, as I'm only comparing my own tests to one another and focusing on their relative differences.
 - I skipped around 20 questions where the 5-shot prompt was above 2048 tokens.
+- I did not set a constant random seed, perhaps introducing unnecessary noise to the test.
 
 ## Applicability of this test
 
